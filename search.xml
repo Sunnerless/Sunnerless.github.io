@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hello World</title>
+    <url>/2024/12/22/hello-world/</url>
+    <content><![CDATA[欢迎来到 Sunnerless Blog 👋
+这是博客重新搭建后的第一篇测试文章，说明一切正常。
+以后怎么写文章
+在项目根目录执行：hexo new post &quot;文章标题&quot;
+编辑 source/_posts/文章标题.md（写 Markdown 就行）
+提交并推送：git add . &amp;&amp; git commit -m &quot;新文章&quot; &amp;&amp; git push
+等 1~2 分钟，GitHub Actions 会自动构建、发布到 https://sunnerless.github.io
+
+也可以本地预览：npm run server，然后浏览器打开 http://localhost:4000
+]]></content>
+      <categories>
+        <category>随笔</category>
+      </categories>
+      <tags>
+        <tag>测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux 常用命令速查表</title>
+    <url>/2026/09/03/linux-commands-cheatsheet/</url>
+    <content><![CDATA[
+这是一份自用的命令备课本，忘记某个命令干什么用的时候来翻这里。记不住那么多命令的话，先背熟第一节的”名字都是缩写”，剩下的随用随查。
+
+0. 命令名都是缩写，记住了就不难
+
+
+命令
+英文全称
+含义
+
+
+
+ls
+list
+列出文件
+
+
+cd
+change directory
+切换目录
+
+
+pwd
+print working directory
+打印当前目录
+
+
+cp
+copy
+复制
+
+
+mv
+move
+移动&#x2F;重命名
+
+
+rm
+remove
+删除
+
+
+mkdir
+make directory
+创建目录
+
+
+cat
+catenate
+拼接&#x2F;查看
+
+
+df
+disk free
+磁盘剩余
+
+
+du
+disk usage
+磁盘占用
+
+
+ps
+process status
+进程状态
+
+
+grep
+global regular expression print
+全局正则搜索
+
+
+1. 最常用：到处走、到处看pwd                    # 我在哪？ls                     # 这里有啥？ ls -la 看所有文件(含隐藏)和详细信息ls -lh                 # 显示文件大小（-h 人性化单位）cd ~                   # 回到家目录（~ 就是家目录）cd /                   # 根目录cd ..                  # 上一级cd -                   # 回到上一个目录cd ../../              # 往上两级tree                   # 树状查看目录结构（没装的话：sudo apt install tree）clear                  # 清屏（或 Ctrl+L）
+
+2. 文件操作touch a.txt            # 新建空文件 / 更新文件时间mkdir mydir            # 新建目录mkdir -p a/b/c         # 递归创建多级目录（-p 很重要）cp a.txt b.txt         # 复制cp -r dir1 dir2        # 复制整个目录（-r）mv a.txt b.txt         # 移动 = 重命名（同目录下就是改名）rm a.txt               # 删除文件rm -r dir              # 删除目录（-r）rm -rf dir             # 强制递归删除！⚠️ 没有回收站，删前想清楚rm -i *.txt            # 删除前逐个询问（安全习惯）
+
+3. 查看文件内容cat a.txt              # 全部输出cat -n a.txt           # 带行号less a.txt             # 分页查看：空格翻页，q 退出，/ 搜索（最推荐）head a.txt             # 前 10 行（默认）head -30 a.txt         # 前 30 行tail a.txt             # 后 10 行tail -f app.log        # 实时跟踪日志输出（Ctrl+C 退出），排查问题神器wc -l a.txt            # 统计行数nano a.txt             # 最简单的编辑器，保存：Ctrl+O，退出：Ctrl+Xvim a.txt              # 万能编辑器入门：i 进入编辑，Esc 退出，:wq 保存退出，:q! 不保存
+
+4. 查找东西which git              # git 装在哪（找可执行文件）find . -name &quot;*.md&quot;    # 当前目录下所有 md 文件find / -name &quot;node_modules&quot; -type d        # 按类型找目录find . -mtime -7       # 最近 7 天修改过的文件grep -rn &quot;error&quot; .     # 在当前目录递归搜索包含 error 的文件（-r 递归 -n 行号）
+
+5. 管道和重定向：Linux 的灵魂 ⭐用 | 把命令串起来，前一个的输出喂给后一个：
+ls | grep &quot;blog&quot;           # 列出文件，只留名字带 blog 的ps aux | grep node         # 找 node 进程history | grep git         # 在历史记录里找 git 命令grep &quot;error&quot; app.log | head -20     # 只取前 20 条错误ls -lh | sort -k5 -n       # 按大小排序cut -d: -f1 /etc/passwd | tail -5  # 以 : 分隔取第一列
+
+重定向保存&#x2F;追加&#x2F;丢弃：
+ls &gt; list.txt          # 输出写入文件（覆盖）ls &gt;&gt; list.txt         # 追加到文件末尾cmd 2&gt;&amp;1 | tee log     # 错误信息也合并输出并同时存到 logecho $?                # 上一条命令的退出码，0 表示成功
+
+6. 权限管理ls -l 输出第一列 drwxr-xr-x 的意思是：d(目录) rwx(所有者) rwx(所属组) rwx(其他人)，r&#x3D;读 w&#x3D;写 x&#x3D;执行。
+chmod +x script.sh     # 给脚本加执行权限chmod 755 file         # 数字法：7=rwx 5=r-x，常用：755(目录) 644(文件)chmod -R 777 dir       # 递归改（慎用全开权限）chown user file        # 改所有者sudo apt install xxx   # 管理员权限执行（装软件都用它）
+
+7. 进程管理ps aux | grep node          # 看进程top                         # 实时资源占用监控，q 退出htop                        # 更好看的 top（需要安装）kill 1234                   # 结束进程 1234（温和）kill -9 1234                # 强制结束（慎用）pkill -f &quot;xxx&quot;              # 按名字批量结束node app.js &amp;               # 放到后台运行nohup node app.js &gt; run.log 2&gt;&amp;1 &amp;   # 关掉终端也不停（最常用）jobs                        # 查看当前终端的后台任务fg                          # 把后台任务调回前台
+
+8. 网络相关ping -c 4 baidu.com      # 测通不通（Windows 上 -c 换成 -n）curl -o file.zip https://xxx    # 下载文件，-L 跟随跳转wget https://xxx         # 另一种下载，支持断点续传ssh user@ip              # 远程登录，Exit 退出scp file.zip user@ip:/home/     # 远程复制文件，-r 传目录ip addr                  # 看 IP 地址（老命令 ifconfig 已被淘汰）ss -tlnp                 # 看端口占用（netstat 的替代品）nslookup example.com     # 查域名解析
+
+9. 压缩与打包tar -zcvf a.tar.gz dir/      # 打包+压缩（z=gzip, c=create, v=显示过程, f=文件名）tar -zxvf a.tar.gz           # 解压到当前目录tar -zxvf a.tar.gz -C /path  # 解压到指定目录 (-C)tar -xJvf a.tar.xz           # 解压 xz 格式zip -r a.zip dir/            # zip 压缩unzip a.zip                  # zip 解压
+
+10. 磁盘与系统信息df -h                    # 磁盘剩余空间（-h 人性化显示）du -sh node_modules      # 某个目录占多大du -sh * | sort -h       # 当前目录下谁最占空间，按大小排free -h                  # 内存情况uname -a                 # 系统内核信息uptime                   # 开机多久了date                     # 当前时间whoami                   # 当前用户history                  # 命令历史，!256 可直接重跑第 256 条
+
+11. Git 常用速查（本博客就是 git 驱动发布）git status               # 现在改了啥git add .                # 暂存所有改动git add 文件名            # 暂存某个文件git commit -m &quot;说明&quot;      # 提交git push                 # 推送到 GitHub（触发自动发布）git pull                 # 拉取最新git log --oneline        # 提交历史git branch -M main       # 当前分支改名 maingit remote -v            # 查看远程仓库地址git stash                # 暂存未提交的改动（临时保存）git stash pop            # 恢复刚暂存的改动git checkout -- xxx      # 丢弃某个文件的未提交修改 ⚠️ 不可恢复
+
+12. npm 常用速查npm install              # 按 package.json 安装依赖（项目根目录执行）npm install xxx          # 安装某个包npm install -g xxx       # 全局安装npm run build            # 运行 package.json 里定义的 build 脚本npm run server           # 运行 server 脚本（本地预览博客）npm ls --depth=0         # 看装了哪些包
+
+13. WSL 专属（本机是 Windows + WSL）/mnt/c/Users/你的用户    # Windows 的 C 盘挂载在这里，跨盘复制文件用explorer.exe .           # 用 Windows 资源管理器打开当前目录wsl -l -v                # Windows 里查看 WSL 状态（在 PowerShell 执行）
+
+
+⚠️ 注意：从 Windows 拖文件进 WSL 目录会带出 xxx:Zone.Identifier 这种垃圾文件，提交前记得删掉：find . -name &quot;*:Zone.Identifier&quot; -delete
+
+14. 终端快捷键（比鼠标快）
+
+
+按键
+作用
+
+
+
+Tab
+自动补全命令&#x2F;路径（按两下列出候选）
+
+
+Ctrl + C
+结束当前命令
+
+
+Ctrl + Z
+挂起当前命令（用 fg 调回）
+
+
+Ctrl + L
+清屏
+
+
+Ctrl + A &#x2F; Ctrl + E
+光标跳到行首 &#x2F; 行尾
+
+
+Ctrl + U &#x2F; Ctrl + W
+删除光标前全部 &#x2F; 删除前一个词
+
+
+Ctrl + R
+搜索历史命令（再按 Ctrl+R 向下翻）
+
+
+↑ &#x2F; ↓
+上一条 &#x2F; 下一条历史命令
+
+
+15. 忘了命令怎么办man ls                   # 官方手册，按 q 退出（最权威）ls --help                # 快速帮助apt list | grep xxx      # 搜软件包history | grep xxx       # 搜自己用过的历史命令which xxx                # 它装在哪
+
+一句话总结：cd 去对地方 → ls 看清有啥 → cat/less 看内容 → 改完 git add . &amp;&amp; git commit &amp;&amp; git push → 博客自动更新。剩下 99% 的命令都能 /mnt/c、sudo apt install、man 三条路解决。
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>命令</tag>
+      </tags>
+  </entry>
+</search>
